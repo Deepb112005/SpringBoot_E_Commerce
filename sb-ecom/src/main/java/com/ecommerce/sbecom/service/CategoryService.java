@@ -1,6 +1,7 @@
 package com.ecommerce.sbecom.service;
 
 import com.ecommerce.sbecom.model.Category;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -11,4 +12,6 @@ public interface CategoryService {
     void createCategory(Category category);
 
     String deleteCategory(Long categoryId);
+
+    Category updateCategory(Long categoryId, Category category);
 }

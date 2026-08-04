@@ -23,21 +23,32 @@ public class CategoryController {
 
     @GetMapping("/api/public/categories")
     public ResponseEntity<List<Category>> getAllCategories() {
-        return new ResponseEntity<>(categoryService.getAllCategories() , HttpStatus.OK);
+        return new ResponseEntity<>(categoryService.getAllCategories(), HttpStatus.OK);
     }
 
     @PostMapping("/api/public/categories")
     public ResponseEntity<String> createCategory(@RequestBody Category category) {
         categoryService.createCategory(category);
-        return new ResponseEntity<>("category resource created" , HttpStatus.CREATED);
+        return new ResponseEntity<>("category resource created", HttpStatus.CREATED);
     }
 
     @DeleteMapping("/api/admin/categories/{categoryId}")
     public ResponseEntity<String> deleteCategory(@PathVariable Long categoryId) {
-        try{
-            return new ResponseEntity<>(categoryService.deleteCategory(categoryId) , HttpStatus.OK);
-        }catch (ResponseStatusException e ){
-            return new ResponseEntity<>(e.getReason() , e.getStatusCode());
+        try {
+            return new ResponseEntity<>(categoryService.deleteCategory(categoryId), HttpStatus.OK);
+        } catch (ResponseStatusException e) {
+            return new ResponseEntity<>(e.getReason(), e.getStatusCode());
+        }
+    }
+
+    @PutMapping("/api/public/categories/{categoryId}")
+    public ResponseEntity<String> updateCategory(@PathVariable Long categoryId,
+                                                 @RequestBody Category category) {
+        try {
+            categoryService.updateCategory(categoryId,category);
+            return new ResponseEntity<>("Category updated with categoryID: " + categoryId, HttpStatus.OK);
+        } catch (ResponseStatusException e) {
+            return new ResponseEntity<>("category with that ID not found", HttpStatus.NOT_FOUND);
         }
     }
 
