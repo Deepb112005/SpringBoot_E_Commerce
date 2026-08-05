@@ -4,14 +4,13 @@ import com.ecommerce.sbecom.model.Category;
 import com.ecommerce.sbecom.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+
+
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
@@ -48,21 +47,14 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Category updateCategory(Long categoryId, Category category) {
-        List<Category> categories = categoryRepository.findAll();
-        Optional<Category> optionalCategory = categories.stream()
-                .filter(c -> c.getCategoryId().equals(categoryId))
-                .findFirst();
 
-        if (optionalCategory.isPresent()) {
+        Category savedCategory = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "updating category not found"));
 
-            Category exitstingCategory = optionalCategory.get();
-            exitstingCategory.setCategoryName(category.getCategoryName());
+        category.setCategoryId(categoryId);
 
-            return categoryRepository.save(exitstingCategory);
-
-        } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Category Not Found");
-        }
+        savedCategory = categoryRepository.save(category);
+        return savedCategory;
 
     }
 
