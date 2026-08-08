@@ -45,9 +45,9 @@ public class CategoryController {
 
     @PutMapping("/public/categories/{categoryId}")
     public ResponseEntity<String> updateCategory(@PathVariable Long categoryId,
-                                                 @RequestBody Category category) {
+                                                 @Valid @RequestBody Category category) {
         try {
-            categoryService.updateCategory(categoryId,category);
+            categoryService.updateCategory(categoryId, category);
             return new ResponseEntity<>("Category updated with categoryID: " + categoryId, HttpStatus.OK);
         } catch (ResponseStatusException e) {
             return new ResponseEntity<>("category with that ID not found", HttpStatus.NOT_FOUND);
