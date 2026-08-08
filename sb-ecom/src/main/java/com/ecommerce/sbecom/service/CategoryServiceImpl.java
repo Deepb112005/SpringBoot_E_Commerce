@@ -5,9 +5,7 @@ import com.ecommerce.sbecom.exceptions.customExceptions.ResourceNotFoundExceptio
 import com.ecommerce.sbecom.model.Category;
 import com.ecommerce.sbecom.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +24,10 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<Category> getAllCategories() {
-        return categoryRepository.findAll();
+        List<Category> categories = categoryRepository.findAll();
+        if (categories.isEmpty())
+            throw new APIException("No Category till now ...");
+        return categories;
     }
 
     @Override
@@ -49,14 +50,11 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Category updateCategory(Long categoryId, Category category) {
-        Category savedCategory = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "updating category not found"));
+        categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new ResourceNotFoundException("category", "categoryId", categoryId));
 
         category.setCategoryId(categoryId);
 
-        savedCategory = categoryRepository.save(category);
-        return savedCategory;
-
+        return categoryRepository.save(category);
     }
-
 }
