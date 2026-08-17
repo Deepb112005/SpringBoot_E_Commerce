@@ -1,4 +1,4 @@
-package com.ecommerce.sbecom.service;
+package com.ecommerce.sbecom.service.impl;
 
 import com.ecommerce.sbecom.exceptions.customExceptions.APIException;
 import com.ecommerce.sbecom.exceptions.customExceptions.ResourceNotFoundException;
@@ -6,6 +6,7 @@ import com.ecommerce.sbecom.model.Category;
 import com.ecommerce.sbecom.payload.CategoryDTO;
 import com.ecommerce.sbecom.payload.CategoryResponse;
 import com.ecommerce.sbecom.repository.CategoryRepository;
+import com.ecommerce.sbecom.service.CategoryService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
