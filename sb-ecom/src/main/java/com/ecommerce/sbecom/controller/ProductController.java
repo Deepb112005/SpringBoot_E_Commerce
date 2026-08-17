@@ -3,6 +3,7 @@ package com.ecommerce.sbecom.controller;
 import com.ecommerce.sbecom.model.Category;
 import com.ecommerce.sbecom.model.Product;
 import com.ecommerce.sbecom.payload.ProductDTO;
+import com.ecommerce.sbecom.payload.ProductResponse;
 import com.ecommerce.sbecom.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -28,4 +29,9 @@ public class ProductController {
         return new ResponseEntity<>(productDTO , HttpStatus.CREATED);
     }
 
+    @GetMapping("/public/products")
+    public ResponseEntity<ProductResponse> getAllProduct(){
+        ProductResponse productResponse = productService.getAllProduct();
+        return new ResponseEntity<>(productResponse , HttpStatus.OK);
+    }
 }
