@@ -1,12 +1,10 @@
 package com.ecommerce.sbecom.controller;
 
-import com.ecommerce.sbecom.model.Category;
 import com.ecommerce.sbecom.model.Product;
 import com.ecommerce.sbecom.payload.ProductDTO;
 import com.ecommerce.sbecom.payload.ProductResponse;
 import com.ecommerce.sbecom.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +30,12 @@ public class ProductController {
     @GetMapping("/public/products")
     public ResponseEntity<ProductResponse> getAllProduct(){
         ProductResponse productResponse = productService.getAllProduct();
+        return new ResponseEntity<>(productResponse , HttpStatus.OK);
+    }
+
+    @GetMapping("/public/categories/{categoryId}/products")
+    public ResponseEntity<ProductResponse> searchByCategory(@PathVariable Long categoryId){
+        ProductResponse productResponse = productService.searchByCategory(categoryId);
         return new ResponseEntity<>(productResponse , HttpStatus.OK);
     }
 }
