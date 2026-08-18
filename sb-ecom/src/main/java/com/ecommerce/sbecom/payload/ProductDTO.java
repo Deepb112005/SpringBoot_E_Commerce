@@ -17,6 +17,10 @@ public class ProductDTO {
     @Size(min = 6 , message = "product name must have at least 8 characters... ")
     private String productName;
     private String image;
+
+    @NotBlank
+    @Size(min = 6 , message = "product description must have at least 8 characters... ")
+    private String description;
     private Integer quantity;
     private double price;
     private double discount;
