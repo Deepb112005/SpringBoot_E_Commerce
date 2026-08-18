@@ -1,5 +1,7 @@
 package com.ecommerce.sbecom.payload;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,6 +12,9 @@ import lombok.NoArgsConstructor;
 public class ProductDTO {
 
     private Long productId;
+
+    @NotBlank
+    @Size(min = 6 , message = "product name must have at least 8 characters... ")
     private String productName;
     private String image;
     private Integer quantity;

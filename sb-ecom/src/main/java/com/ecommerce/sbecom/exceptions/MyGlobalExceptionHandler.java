@@ -3,6 +3,7 @@ package com.ecommerce.sbecom.exceptions;
 import com.ecommerce.sbecom.exceptions.customExceptions.APIException;
 import com.ecommerce.sbecom.exceptions.customExceptions.ResourceNotFoundException;
 import com.ecommerce.sbecom.payload.APIResponse;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -42,6 +43,10 @@ public class MyGlobalExceptionHandler {
     public ResponseEntity<APIResponse> myAPIException(APIException ex) {
         APIResponse apiResponse = new APIResponse(ex.getMessage(), false);
         return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
+    }
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<String> handleConstraintViolation(ConstraintViolationException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
 
