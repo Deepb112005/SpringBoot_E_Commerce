@@ -19,12 +19,12 @@ public class Product {
     private Long productId;
 
     @NotBlank
-    @Size(min = 6 , message = "product name must have at least 8 characters... ")
+    @Size(min = 6, message = "product name must have at least 8 characters... ")
     private String productName;
     private String image;
 
     @NotBlank
-    @Size(min = 6 , message = "product description must have at least 8 characters... ")
+    @Size(min = 6, message = "product description must have at least 8 characters... ")
     private String description;
     private Integer quantity;
     private double price;
@@ -34,4 +34,8 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
+
+    @ManyToOne
+    @JoinColumn(name = "seller_user_id")
+    private User user;
 }
