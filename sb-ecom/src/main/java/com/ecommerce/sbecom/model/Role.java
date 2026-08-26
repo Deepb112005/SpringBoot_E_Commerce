@@ -4,6 +4,7 @@ package com.ecommerce.sbecom.model;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Data
@@ -16,6 +17,7 @@ public class Role {
     @Column(name = "role_id")
     private Integer roleId;
 
+    @ToString.Exclude
     @Enumerated(EnumType.STRING)
     @Column(name = "role_name", length = 20)
     private AppRole roleName;

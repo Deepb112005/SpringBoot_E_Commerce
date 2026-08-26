@@ -4,10 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.HashSet;
 import java.util.List;
@@ -45,6 +42,7 @@ public class User {
     @Column(name = "password")
     private String password;
 
+
     @Getter
     @Setter
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
@@ -56,6 +54,7 @@ public class User {
     private Set<Role> roles = new HashSet<>();
 
 
+    @ToString.Exclude
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "user_addresses",
@@ -65,6 +64,7 @@ public class User {
     private List<Address> addresses;
 
 
+    @ToString.Exclude
     @OneToMany(
             mappedBy = "user",
             cascade = {CascadeType.PERSIST, CascadeType.MERGE},
