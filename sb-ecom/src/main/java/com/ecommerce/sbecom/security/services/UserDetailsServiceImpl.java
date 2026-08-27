@@ -1,6 +1,7 @@
 package com.ecommerce.sbecom.security.services;
 
 import com.ecommerce.sbecom.model.User;
+import com.ecommerce.sbecom.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
