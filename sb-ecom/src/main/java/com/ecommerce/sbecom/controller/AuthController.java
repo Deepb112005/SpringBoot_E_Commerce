@@ -1,9 +1,16 @@
 package com.ecommerce.sbecom.controller;
 
+import com.ecommerce.sbecom.model.AppRole;
+import com.ecommerce.sbecom.model.Role;
+import com.ecommerce.sbecom.model.User;
+import com.ecommerce.sbecom.repository.UserRepository;
 import com.ecommerce.sbecom.security.jwt.JwtUtils;
 import com.ecommerce.sbecom.security.request.LoginRequest;
+import com.ecommerce.sbecom.security.request.SignupRequest;
+import com.ecommerce.sbecom.security.response.MessageResponse;
 import com.ecommerce.sbecom.security.response.UserInfoResponse;
 import com.ecommerce.sbecom.security.services.UserDetailsImpl;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,13 +22,12 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 public class AuthController {
@@ -31,6 +37,12 @@ public class AuthController {
 
     @Autowired
     private JwtUtils jwtUtils;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
@@ -62,6 +74,60 @@ public class AuthController {
         UserInfoResponse loginResponse = new UserInfoResponse(userDetails.getId(), userDetails.getUsername(), jwtToken, roles);
 
         return new ResponseEntity<UserInfoResponse>(loginResponse, HttpStatus.OK);
+
+    }
+
+    @PostMapping
+    public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signupRequest) {
+        if (userRepository.existsByUserName(signupRequest.getUsername())) {
+            return ResponseEntity.badRequest().body(new MessageResponse("Error : username is already taken!"));
+        }
+
+        if (userRepository.existsByUserEmail(signupRequest.getEmail())) {
+            return ResponseEntity.badRequest().body(new MessageResponse("Error : Email is already taken!"));
+        }
+
+        User user = new User(
+                signupRequest.getUsername(),
+                signupRequest.getEmail(),
+                passwordEncoder.encode(signupRequest.getPassword())
+        );
+
+        Set<String> strRoles = signupRequest.getRoles();
+        Set<Role> roles = new HashSet<>();
+
+        if (strRoles == null) {
+            Role userRole = roleRepositoy.findByRoleName(AppRole.ROLE_USER)
+                    .orElseThrow(() -> new RuntimeException("Error : Role is no found "));
+            roles.add(userRole);
+        } else {
+
+            strRoles.forEach(role -> {
+                switch (role) {
+                    case "admin":
+                        Role adminRole = roleRepositoy.findByRoleName(AppRole.ROLE_ADMIN)
+                                .orElseThrow(() -> new RuntimeException("Error : Role is no found "));
+                        roles.add(adminRole);
+                        break;
+
+                    case "seller":
+                        Role sellerRole = roleRepositoy.findByRoleName(AppRole.ROLE_SELLER)
+                                .orElseThrow(() -> new RuntimeException("Error : Role is no found "));
+                        roles.add(sellerRole);
+                        break;
+                    default:
+                        Role userRole = roleRepositoy.findByRoleName(AppRole.ROLE_USER)
+                                .orElseThrow(() -> new RuntimeException("Error : Role is no found "));
+                        roles.add(userRole);
+                }
+
+
+            });
+        }
+
+        user.setRoles(roles);
+        userRepository.save(user);
+        return ResponseEntity.ok().body(new MessageResponse("User registered successfully !"));
 
     }
 
