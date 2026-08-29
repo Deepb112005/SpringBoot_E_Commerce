@@ -3,6 +3,7 @@ package com.ecommerce.sbecom.controller;
 import com.ecommerce.sbecom.model.AppRole;
 import com.ecommerce.sbecom.model.Role;
 import com.ecommerce.sbecom.model.User;
+import com.ecommerce.sbecom.repository.RoleRepository;
 import com.ecommerce.sbecom.repository.UserRepository;
 import com.ecommerce.sbecom.security.jwt.JwtUtils;
 import com.ecommerce.sbecom.security.request.LoginRequest;
@@ -40,6 +41,9 @@ public class AuthController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private RoleRepository roleRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -97,7 +101,7 @@ public class AuthController {
         Set<Role> roles = new HashSet<>();
 
         if (strRoles == null) {
-            Role userRole = roleRepositoy.findByRoleName(AppRole.ROLE_USER)
+            Role userRole = roleRepository.findByRoleName(AppRole.ROLE_USER)
                     .orElseThrow(() -> new RuntimeException("Error : Role is no found "));
             roles.add(userRole);
         } else {
@@ -105,18 +109,18 @@ public class AuthController {
             strRoles.forEach(role -> {
                 switch (role) {
                     case "admin":
-                        Role adminRole = roleRepositoy.findByRoleName(AppRole.ROLE_ADMIN)
+                        Role adminRole = roleRepository.findByRoleName(AppRole.ROLE_ADMIN)
                                 .orElseThrow(() -> new RuntimeException("Error : Role is no found "));
                         roles.add(adminRole);
                         break;
 
                     case "seller":
-                        Role sellerRole = roleRepositoy.findByRoleName(AppRole.ROLE_SELLER)
+                        Role sellerRole = roleRepository.findByRoleName(AppRole.ROLE_SELLER)
                                 .orElseThrow(() -> new RuntimeException("Error : Role is no found "));
                         roles.add(sellerRole);
                         break;
                     default:
-                        Role userRole = roleRepositoy.findByRoleName(AppRole.ROLE_USER)
+                        Role userRole = roleRepository.findByRoleName(AppRole.ROLE_USER)
                                 .orElseThrow(() -> new RuntimeException("Error : Role is no found "));
                         roles.add(userRole);
                 }
