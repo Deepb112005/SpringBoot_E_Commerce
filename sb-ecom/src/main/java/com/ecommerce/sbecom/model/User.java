@@ -73,6 +73,15 @@ public class User {
     private Set<Product> products;
 
 
+    @ToString.Exclude
+    @OneToOne(
+            mappedBy = "user",
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE},
+            orphanRemoval = true
+    )
+    private Cart cart;
+
+
     public User(String userName, String email, String password) {
         this.email = email;
         this.password = password;
