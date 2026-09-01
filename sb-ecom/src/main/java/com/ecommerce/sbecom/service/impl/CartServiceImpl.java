@@ -11,6 +11,7 @@ import com.ecommerce.sbecom.repository.CartItemRepository;
 import com.ecommerce.sbecom.repository.CartRepository;
 import com.ecommerce.sbecom.repository.ProductRepository;
 import com.ecommerce.sbecom.service.CartService;
+import com.ecommerce.sbecom.utils.AuthUtil;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,6 +34,7 @@ public class CartServiceImpl implements CartService {
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
     private AuthUtil authUtil;
 
 
